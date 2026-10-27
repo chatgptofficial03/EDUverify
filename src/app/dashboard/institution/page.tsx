@@ -13,8 +13,11 @@ import {
   ShieldAlert,
   GraduationCap,
   Download,
+  Sparkles,
+  Award,
 } from 'lucide-react';
-import { MetricCard, Card } from '@/components/ui/Card';
+import { Card } from '@/components/ui/Card';
+import { MetricCard3D } from '@/components/3d/MetricCard3D';
 import { Badge, StatusBadge } from '@/components/ui/Badge';
 import {
   ResponsiveContainer,
@@ -50,15 +53,15 @@ export default function InstitutionDashboardPage() {
   if (loading) {
     return (
       <div className="space-y-6 animate-pulse">
-        <div className="h-8 bg-slate-200 rounded w-1/4"></div>
+        <div className="h-8 bg-parchment-200 rounded w-1/4"></div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="h-32 bg-slate-200 rounded-xl"></div>
+            <div key={i} className="h-32 bg-parchment-200 rounded-2xl"></div>
           ))}
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="h-80 bg-slate-200 rounded-xl"></div>
-          <div className="h-80 bg-slate-200 rounded-xl"></div>
+          <div className="h-80 bg-parchment-200 rounded-2xl"></div>
+          <div className="h-80 bg-parchment-200 rounded-2xl"></div>
         </div>
       </div>
     );
@@ -72,58 +75,65 @@ export default function InstitutionDashboardPage() {
   const approvedIntake = metrics.totalApprovedIntake || 200;
   const activeEnrolment = metrics.activeEnrolments || 0;
 
-  const COLORS = ['#2563eb', '#3b82f6', '#60a5fa', '#93c5fd', '#bfdbfe'];
+  const COLORS = ['#c59b48', '#486694', '#dfb76c', '#1d304e', '#aa7e37', '#709cc5'];
 
   return (
     <div className="space-y-8">
       {/* Page Title & Action Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-gold-300/30 pb-5">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Institution Dashboard</h1>
-          <p className="text-xs text-slate-500 mt-1">
-            Real-time enrolment monitoring and APAAR-linked student registry status
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-[10px] font-mono uppercase tracking-widest text-gold-700 font-bold bg-gold-500/15 px-2.5 py-0.5 rounded-full border border-gold-400/40">
+              Institutional Intelligence Node
+            </span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-display font-extrabold text-oxford-950 tracking-tight">
+            Institutional Dashboard
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-600 font-serif mt-0.5">
+            Real-time enrolment monitoring, APAAR student registry synchronization, and capacity compliance
           </p>
         </div>
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-3">
           <a
             href="/api/reports/export?type=students"
-            className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 shadow-xs"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-serif font-bold text-oxford-900 bg-white border border-gold-300/60 rounded-xl hover:bg-gold-50 shadow-3d-sm transition-all hover:-translate-y-0.5"
           >
-            <Download className="w-3.5 h-3.5" />
-            Export Records
+            <Download className="w-3.5 h-3.5 text-gold-600" />
+            <span>Export Official Records</span>
           </a>
           <Link
             href="/imports/new"
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-500 shadow-sm shadow-blue-600/30"
+            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-serif font-bold text-oxford-950 bg-gradient-to-r from-gold-400 via-amber-300 to-gold-500 hover:from-gold-300 hover:to-gold-400 rounded-xl shadow-3d-gold transition-all hover:-translate-y-0.5"
           >
-            <UploadCloud className="w-4 h-4" />
-            Upload Student CSV
+            <UploadCloud className="w-4 h-4 text-oxford-950" />
+            <span>Upload Student CSV</span>
           </Link>
         </div>
       </div>
 
-      {/* Top Metric Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <MetricCard
+      {/* 3D Top Metric Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <MetricCard3D
           title="Total Student Records"
           value={metrics.totalStudents || 0}
-          subtitle="Enrolled in Academic Year"
-          icon={<Users className="w-5 h-5 text-blue-600" />}
+          subtitle="Enrolled in Academic Cycle"
+          icon={<Users className="w-5 h-5" />}
         />
 
-        <MetricCard
+        <MetricCard3D
           title="Active Enrolments"
           value={activeEnrolment}
-          subtitle={`Approved Intake: ${approvedIntake}`}
-          icon={<GraduationCap className="w-5 h-5 text-indigo-600" />}
+          subtitle={`AICTE Approved Intake: ${approvedIntake}`}
+          icon={<GraduationCap className="w-5 h-5" />}
           badge={<StatusBadge status="ACTIVE" />}
         />
 
-        <MetricCard
+        <MetricCard3D
           title="Intake Utilization"
           value={`${utilization}%`}
-          subtitle={`${metrics.remainingSeats || 0} seats remaining`}
-          icon={<TrendingUp className="w-5 h-5 text-emerald-600" />}
+          subtitle={`${metrics.remainingSeats || 0} approved seats remaining`}
+          icon={<TrendingUp className="w-5 h-5" />}
           badge={
             <Badge
               variant={
@@ -131,7 +141,7 @@ export default function InstitutionDashboardPage() {
                   ? 'danger'
                   : metrics.statusTier === 'APPROACHING'
                   ? 'warning'
-                  : 'success'
+                  : 'gold'
               }
             >
               {metrics.statusTier?.replace('_', ' ') || 'NORMAL'}
@@ -139,65 +149,88 @@ export default function InstitutionDashboardPage() {
           }
         />
 
-        <MetricCard
+        <MetricCard3D
           title="Batch Clearance"
           value={metrics.approvedBatches || 0}
-          subtitle={`${metrics.pendingBatches || 0} awaiting central review`}
-          icon={<FileCheck2 className="w-5 h-5 text-purple-600" />}
+          subtitle={`${metrics.pendingBatches || 0} awaiting central AICTE clearance`}
+          icon={<FileCheck2 className="w-5 h-5" />}
         />
       </div>
 
-      {/* Intake Capacity Alert Bar */}
-      <Card className="bg-gradient-to-r from-blue-900 to-slate-900 text-white border-0">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="space-y-1.5 text-center md:text-left">
-            <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-blue-800/80 text-blue-200 text-xs font-semibold">
-              <CheckCircle2 className="w-3.5 h-3.5 text-blue-300" />
-              <span>AICTE Seat Matrix Monitoring</span>
+      {/* AICTE Capacity & Regulatory Compliance Banner (Classic Sovereign Dark) */}
+      <div className="bg-gradient-to-r from-oxford-950 via-oxford-900 to-oxford-950 text-white rounded-3xl p-6 sm:p-8 border border-gold-400/40 shadow-3d-dark relative overflow-hidden">
+        {/* Guilloche Dark Security Pattern */}
+        <div className="absolute inset-0 dark-guilloche-pattern opacity-40 pointer-events-none" />
+
+        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="space-y-2 text-center md:text-left">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold-500/20 text-gold-300 border border-gold-400/40 text-xs font-serif font-bold">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+              <span>AICTE Seat Matrix Regulatory Assurance</span>
             </div>
-            <h3 className="text-lg font-bold">Approved Institutional Capacity: {approvedIntake} Seats</h3>
-            <p className="text-xs text-slate-300 max-w-xl">
-              Currently, {activeEnrolment} active students are mapped to verified APAAR IDs. {approvedIntake - activeEnrolment} seats remain available under official AICTE guidelines.
+            <h3 className="text-xl sm:text-2xl font-display font-extrabold text-white tracking-tight">
+              Approved Institutional Capacity: {approvedIntake} Seats
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-300 max-w-xl font-serif leading-relaxed">
+              Currently, {activeEnrolment} active students are mapped to verified APAAR IDs. {approvedIntake - activeEnrolment} seats remain available under official AICTE statutory limits.
             </p>
           </div>
-          <div className="w-full md:w-64 space-y-2">
-            <div className="flex justify-between text-xs font-medium">
-              <span>Capacity Utilized</span>
-              <span className="font-bold text-blue-300">{utilization}%</span>
+
+          <div className="w-full md:w-72 space-y-2.5 bg-black/40 p-4 rounded-2xl border border-gold-500/30 backdrop-blur-xs">
+            <div className="flex justify-between text-xs font-serif">
+              <span className="text-slate-300">Regulatory Capacity Used:</span>
+              <span className="font-bold font-mono text-gold-300">{utilization}%</span>
             </div>
-            <div className="w-full bg-slate-800 rounded-full h-3 overflow-hidden p-0.5 border border-slate-700">
+            <div className="w-full bg-oxford-950 rounded-full h-3.5 overflow-hidden p-0.5 border border-gold-500/30">
               <div
-                className={`h-full rounded-full transition-all duration-500 ${
+                className={`h-full rounded-full transition-all duration-700 shadow-sm ${
                   utilization > 100
                     ? 'bg-rose-500'
                     : utilization >= 80
                     ? 'bg-amber-400'
-                    : 'bg-emerald-400'
+                    : 'bg-gradient-to-r from-emerald-500 to-gold-400'
                 }`}
                 style={{ width: `${Math.min(utilization, 100)}%` }}
               />
             </div>
+            <div className="text-[10px] text-slate-400 text-right font-mono">
+              Status: {metrics.statusTier || 'NOMINAL'}
+            </div>
           </div>
         </div>
-      </Card>
+      </div>
 
       {/* Visual Analytics Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Programme Distribution */}
-        <Card title="Programme-Wise Enrolment" subtitle="Active distribution across departments">
+        <Card title="Departmental Enrolment Distribution" subtitle="Active registered students across sanctioned disciplines">
           <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
                 data={charts.programmeDistribution || []}
-                margin={{ top: 10, right: 10, left: -20, bottom: 20 }}
+                margin={{ top: 10, right: 10, left: -20, bottom: 25 }}
               >
-                <XAxis dataKey="name" tick={{ fontSize: 11 }} interval={0} angle={-15} textAnchor="end" />
-                <YAxis tick={{ fontSize: 11 }} />
+                <XAxis
+                  dataKey="name"
+                  tick={{ fontSize: 10, fill: '#324463', fontFamily: 'serif' }}
+                  interval={0}
+                  angle={-15}
+                  textAnchor="end"
+                />
+                <YAxis tick={{ fontSize: 10, fill: '#324463' }} />
                 <Tooltip
                   formatter={(val: any) => [`${val} Students`, 'Enrolled']}
-                  contentStyle={{ backgroundColor: '#0f172a', borderColor: '#1e293b', color: '#fff', borderRadius: '8px', fontSize: '12px' }}
+                  contentStyle={{
+                    backgroundColor: '#0a0f18',
+                    borderColor: '#c59b48',
+                    color: '#f6f0dd',
+                    borderRadius: '12px',
+                    fontSize: '12px',
+                    fontFamily: 'serif',
+                    boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
+                  }}
                 />
-                <Bar dataKey="count" radius={[4, 4, 0, 0]}>
+                <Bar dataKey="count" radius={[6, 6, 0, 0]}>
                   {(charts.programmeDistribution || []).map((entry: any, index: number) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
@@ -210,70 +243,39 @@ export default function InstitutionDashboardPage() {
         {/* Recent Audit Activity */}
         <Card
           title="Institutional Audit Trail"
-          subtitle="Recent verified actions recorded"
+          subtitle="Cryptographically verified administrative logs"
           action={
-            <Link href="/audit" className="text-xs text-blue-600 hover:underline flex items-center gap-1 font-medium">
-              <span>View full log</span>
+            <Link
+              href="/audit"
+              className="text-xs text-gold-700 hover:text-gold-900 flex items-center gap-1 font-serif font-bold hover:underline"
+            >
+              <span>View full ledger</span>
               <ArrowRight className="w-3 h-3" />
             </Link>
           }
         >
-          <div className="space-y-3.5 max-h-64 overflow-y-auto divide-y divide-slate-100">
+          <div className="divide-y divide-slate-100">
             {audits.length === 0 ? (
-              <div className="text-xs text-slate-400 text-center py-8">No recent events.</div>
+              <div className="py-8 text-center text-xs text-slate-400 font-serif">
+                No recent transactions recorded.
+              </div>
             ) : (
-              audits.map((item: any) => (
-                <div key={item.id} className="pt-3 first:pt-0 flex items-start justify-between gap-4 text-xs">
+              audits.slice(0, 5).map((log: any) => (
+                <div key={log.id} className="py-3 flex items-center justify-between text-xs font-sans">
                   <div>
-                    <div className="font-semibold text-slate-800 flex items-center gap-2">
-                      <span className="font-mono text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded text-[11px]">
-                        {item.action}
-                      </span>
-                      <span className="text-slate-600 font-normal">{item.entityType}</span>
-                    </div>
-                    <div className="text-slate-400 text-[11px] mt-1">By {item.actorEmail}</div>
+                    <div className="font-serif font-bold text-oxford-900">{log.action?.replace(/_/g, ' ')}</div>
+                    <div className="text-[11px] text-slate-500">{log.details || log.targetType}</div>
                   </div>
-                  <span className="text-[10px] text-slate-400 font-mono shrink-0">
-                    {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  </span>
+                  <div className="text-right">
+                    <span className="font-mono text-[10px] text-slate-400">
+                      {new Date(log.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </span>
+                  </div>
                 </div>
               ))
             )}
           </div>
         </Card>
-      </div>
-
-      {/* Quick Launchpad to Student Directory & Upload */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Link
-          href="/students"
-          className="p-5 bg-white border border-slate-200 rounded-xl hover:border-blue-400 hover:shadow-sm transition-all flex items-center justify-between group"
-        >
-          <div>
-            <h4 className="font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
-              Student Directory
-            </h4>
-            <p className="text-xs text-slate-500 mt-1">
-              Browse, filter, and edit institutional student records with masked APAAR identifiers.
-            </p>
-          </div>
-          <ArrowRight className="w-5 h-5 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
-        </Link>
-
-        <Link
-          href="/imports/new"
-          className="p-5 bg-white border border-slate-200 rounded-xl hover:border-blue-400 hover:shadow-sm transition-all flex items-center justify-between group"
-        >
-          <div>
-            <h4 className="font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
-              CSV Bulk Upload Wizard
-            </h4>
-            <p className="text-xs text-slate-500 mt-1">
-              Validate enrolment files, resolve duplicates, and submit batches for AICTE review.
-            </p>
-          </div>
-          <ArrowRight className="w-5 h-5 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
-        </Link>
       </div>
     </div>
   );

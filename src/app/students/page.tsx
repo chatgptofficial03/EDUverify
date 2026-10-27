@@ -15,10 +15,12 @@ import {
   AlertCircle,
   CheckCircle2,
   Lock,
+  ShieldCheck,
 } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { Badge, StatusBadge } from '@/components/ui/Badge';
 import { Modal } from '@/components/ui/Modal';
+import { ApaarCard3D } from '@/components/3d/ApaarCard3D';
 
 export default function StudentsDirectoryPage() {
   const [students, setStudents] = useState<any[]>([]);
@@ -390,59 +392,87 @@ export default function StudentsDirectoryPage() {
         <Modal
           isOpen={Boolean(viewStudent)}
           onClose={() => setViewStudent(null)}
-          title="Student Record Profile"
-          subtitle={`Roll: ${viewStudent.studentRecordNumber}`}
+          title="Student APAAR Credential & Registry Record"
+          subtitle={`Institutional Roll: ${viewStudent.studentRecordNumber}`}
+          maxWidth="2xl"
         >
-          <div className="space-y-4 text-xs">
-            <div className="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
+          <div className="space-y-6 text-xs font-sans">
+            {/* Interactive 3D APAAR ID Smart Card */}
+            <div className="p-5 bg-gradient-to-b from-oxford-950 to-oxford-900 rounded-2xl border border-gold-400/40 shadow-3d-lg flex flex-col items-center">
+              <div className="text-[10px] font-mono text-gold-300 mb-2 flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span>INTERACTIVE 3D APAAR SMART CARD &bull; TILT WITH MOUSE & TAP TO FLIP</span>
+              </div>
+              <ApaarCard3D
+                student={{
+                  fullName: viewStudent.fullName,
+                  apaarId: viewStudent.apaarId || viewStudent.maskedApaarId,
+                  maskedApaarId: viewStudent.maskedApaarId,
+                  studentRecordNumber: viewStudent.studentRecordNumber,
+                  programme: viewStudent.programme,
+                  course: viewStudent.course,
+                  academicYear: viewStudent.academicYear,
+                  institutionName: viewStudent.institution?.name || 'Delhi Institute of Technology',
+                  institutionCode: viewStudent.institution?.code || 'AICTE-DL-001',
+                  enrolmentStatus: viewStudent.enrolmentStatus,
+                }}
+              />
+            </div>
+
+            {/* Official Academic Registry Details */}
+            <div className="grid grid-cols-2 gap-3.5 bg-parchment-50 p-4 rounded-2xl border border-gold-300/40">
               <div>
-                <span className="text-slate-400 block font-medium">Full Name</span>
-                <span className="font-bold text-slate-900 text-sm">{viewStudent.fullName}</span>
+                <span className="text-slate-500 block font-serif font-semibold text-[11px] uppercase">Full Legal Name</span>
+                <span className="font-serif font-bold text-oxford-950 text-sm">{viewStudent.fullName}</span>
               </div>
               <div>
-                <span className="text-slate-400 block font-medium">Masked APAAR ID</span>
-                <span className="font-mono font-semibold text-slate-900">{viewStudent.maskedApaarId}</span>
+                <span className="text-slate-500 block font-serif font-semibold text-[11px] uppercase">12-Digit Masked APAAR ID</span>
+                <span className="font-mono font-bold text-oxford-950 text-sm flex items-center gap-1.5">
+                  <Lock className="w-3.5 h-3.5 text-gold-600" />
+                  {viewStudent.maskedApaarId}
+                </span>
               </div>
               <div>
-                <span className="text-slate-400 block font-medium">Programme</span>
-                <span className="font-medium text-slate-800">{viewStudent.programme}</span>
+                <span className="text-slate-500 block font-serif font-semibold text-[11px] uppercase">Programme Enrolled</span>
+                <span className="font-semibold text-oxford-950">{viewStudent.programme}</span>
               </div>
               <div>
-                <span className="text-slate-400 block font-medium">Academic Year</span>
-                <span className="font-mono text-slate-800">{viewStudent.academicYear}</span>
+                <span className="text-slate-500 block font-serif font-semibold text-[11px] uppercase">Academic Year Cycle</span>
+                <span className="font-mono font-bold text-oxford-950">{viewStudent.academicYear}</span>
               </div>
               <div>
-                <span className="text-slate-400 block font-medium">Admission Date</span>
-                <span className="font-medium text-slate-800">{viewStudent.admissionDate}</span>
+                <span className="text-slate-500 block font-serif font-semibold text-[11px] uppercase">Admission Clearance Date</span>
+                <span className="font-mono text-slate-800">{viewStudent.admissionDate}</span>
               </div>
               <div>
-                <span className="text-slate-400 block font-medium">Seat Category</span>
-                <span className="font-medium text-slate-800">{viewStudent.seatCategory}</span>
+                <span className="text-slate-500 block font-serif font-semibold text-[11px] uppercase">Approved Seat Category</span>
+                <Badge variant="gold">{viewStudent.seatCategory}</Badge>
               </div>
               <div>
-                <span className="text-slate-400 block font-medium">Enrolment Status</span>
+                <span className="text-slate-500 block font-serif font-semibold text-[11px] uppercase">AICTE Regulatory Status</span>
                 <StatusBadge status={viewStudent.enrolmentStatus} />
               </div>
               <div>
-                <span className="text-slate-400 block font-medium">Special Category</span>
-                <span>
-                  {viewStudent.nriStatus ? 'NRI ' : ''}
-                  {viewStudent.ociStatus ? 'OCI ' : ''}
+                <span className="text-slate-500 block font-serif font-semibold text-[11px] uppercase">Citizenship / Domicile</span>
+                <span className="font-medium text-oxford-900">
+                  {viewStudent.nriStatus ? 'NRI Quota ' : ''}
+                  {viewStudent.ociStatus ? 'OCI Foreign National ' : ''}
                   {!viewStudent.nriStatus && !viewStudent.ociStatus ? 'Standard Indian National' : ''}
                 </span>
               </div>
             </div>
 
-            <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg text-blue-900">
-              <span className="font-semibold">Privacy Protection:</span> Sensitive identifier values are masked in accordance with AICTE data minimization principles.
+            <div className="p-3 bg-gold-50/80 border border-gold-300/60 rounded-xl text-oxford-900 text-[11px] font-serif flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-gold-600 shrink-0" />
+              <span><strong>AICTE Privacy Minimization:</strong> Confidential demographic markers remain masked during queries under DPDP Act 2023 regulations.</span>
             </div>
 
-            <div className="flex justify-end pt-2">
+            <div className="flex justify-end pt-1">
               <button
                 onClick={() => setViewStudent(null)}
-                className="px-4 py-2 bg-slate-200 text-slate-800 rounded-lg font-medium hover:bg-slate-300"
+                className="px-5 py-2 bg-oxford-950 hover:bg-oxford-900 text-gold-200 border border-gold-400/50 rounded-xl font-serif font-bold transition-all shadow-xs"
               >
-                Close
+                Close Profile
               </button>
             </div>
           </div>

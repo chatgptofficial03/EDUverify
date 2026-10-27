@@ -2,29 +2,34 @@ import React from 'react';
 
 interface BadgeProps {
   children: React.ReactNode;
-  variant?: 'success' | 'warning' | 'danger' | 'info' | 'neutral' | 'purple';
+  variant?: 'success' | 'warning' | 'danger' | 'info' | 'neutral' | 'purple' | 'gold';
   size?: 'sm' | 'md';
 }
 
 export function Badge({ children, variant = 'neutral', size = 'sm' }: BadgeProps) {
   const variantStyles = {
-    success: 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800',
-    warning: 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800',
-    danger: 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800',
-    info: 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-800',
-    neutral: 'bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700',
-    purple: 'bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-950/40 dark:text-purple-300 dark:border-purple-800',
+    success: 'bg-emerald-50 text-emerald-800 border-emerald-300/80 shadow-xs font-medium',
+    warning: 'bg-amber-50 text-amber-900 border-amber-300/80 shadow-xs font-medium',
+    danger: 'bg-rose-50 text-rose-800 border-rose-300/80 shadow-xs font-medium',
+    info: 'bg-oxford-50 text-oxford-800 border-oxford-300/80 shadow-xs font-medium',
+    neutral: 'bg-slate-100 text-slate-800 border-slate-300 shadow-xs font-medium',
+    purple: 'bg-purple-50 text-purple-900 border-purple-300/80 shadow-xs font-medium',
+    gold: 'bg-gradient-to-r from-gold-100/90 to-amber-100/90 text-gold-950 border-gold-400/60 shadow-xs font-serif font-semibold',
   };
 
   const sizeStyles = {
-    sm: 'text-xs px-2 py-0.5 rounded-full',
-    md: 'text-sm px-2.5 py-1 rounded-md',
+    sm: 'text-[11px] px-2.5 py-0.5 rounded-full tracking-wide',
+    md: 'text-xs px-3 py-1 rounded-md tracking-wide',
   };
 
   return (
     <span
-      className={`inline-flex items-center font-medium border ${variantStyles[variant]} ${sizeStyles[size]}`}
+      className={`inline-flex items-center gap-1.5 border ${variantStyles[variant]} ${sizeStyles[size]}`}
     >
+      {variant === 'success' && <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 inline-block" />}
+      {variant === 'gold' && <span className="w-1.5 h-1.5 rounded-full bg-gold-600 inline-block" />}
+      {variant === 'warning' && <span className="w-1.5 h-1.5 rounded-full bg-amber-500 inline-block" />}
+      {variant === 'danger' && <span className="w-1.5 h-1.5 rounded-full bg-rose-600 inline-block" />}
       {children}
     </span>
   );
