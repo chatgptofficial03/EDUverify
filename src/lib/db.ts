@@ -7,12 +7,7 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 function getDatabaseUrl(): string {
-  // If user provided a remote database (e.g. PostgreSQL, MySQL in production), respect it
-  if (process.env.DATABASE_URL && !process.env.DATABASE_URL.startsWith('file:')) {
-    return process.env.DATABASE_URL;
-  }
-
-  // Check if running in a serverless environment (Vercel, AWS Lambda, Netlify)
+  // Check if running in a serverless environment (Vercel, AWS Lambda, Netlify, Linux production)
   const isServerless = Boolean(
     process.env.VERCEL ||
     process.env.AWS_LAMBDA_FUNCTION_NAME ||
@@ -46,23 +41,20 @@ function getDatabaseUrl(): string {
     return targetUrl;
   }
 
-  // Local / standard server environment
-  const defaultLocalDb = path.resolve(process.cwd(), 'prisma', 'dev.db');
-  let finalUrl = `file:${defaultLocalDb}`;
-
+  // Ensure any environment DATABASE_URL begins with file: for SQLite
   if (process.env.DATABASE_URL) {
-    const cleanPath = process.env.DATABASE_URL.replace(/^file:/, '');
-    if (path.isAbsolute(cleanPath) && fs.existsSync(cleanPath)) {
-      finalUrl = process.env.DATABASE_URL;
-    } else if (fs.existsSync(defaultLocalDb)) {
-      finalUrl = `file:${defaultLocalDb}`;
-    } else {
-      finalUrl = process.env.DATABASE_URL;
+    let url = process.env.DATABASE_URL.trim();
+    if (!url.startsWith('file:')) {
+      url = `file:${url}`;
     }
+    process.env.DATABASE_URL = url;
+    return url;
   }
 
-  process.env.DATABASE_URL = finalUrl;
-  return finalUrl;
+  // Default SQLite file URL
+  const defaultUrl = 'file:./dev.db';
+  process.env.DATABASE_URL = defaultUrl;
+  return defaultUrl;
 }
 
 const dbUrl = getDatabaseUrl();
