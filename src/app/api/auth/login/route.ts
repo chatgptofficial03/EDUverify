@@ -10,6 +10,8 @@ import {
 } from '@/lib/auth';
 import { logAuditEvent } from '@/lib/audit';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -90,8 +92,8 @@ export async function POST(req: NextRequest) {
     // Determine redirect path by role
     let redirectPath = '/dashboard/institution';
     if (user.role === 'AICTE_ADMIN') redirectPath = '/dashboard/central';
-    else if (user.role === 'VERIFIER') redirectPath = '/dashboard/verification';
-    else if (user.role === 'OBSERVER') redirectPath = '/dashboard/analytics';
+    else if (user.role === 'VERIFIER') redirectPath = '/verification';
+    else if (user.role === 'OBSERVER') redirectPath = '/analytics';
 
     return NextResponse.json({
       success: true,
@@ -100,8 +102,12 @@ export async function POST(req: NextRequest) {
     });
   } catch (err: any) {
     console.error('Login error:', err);
+    const message =
+      err?.message && !err.message.includes('password')
+        ? `Authentication error: ${err.message}`
+        : 'An unexpected internal error occurred during authentication.';
     return NextResponse.json(
-      { error: 'An unexpected internal error occurred.' },
+      { error: message },
       { status: 500 }
     );
   }

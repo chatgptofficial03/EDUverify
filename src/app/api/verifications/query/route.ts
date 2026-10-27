@@ -5,6 +5,8 @@ import { maskApaarId } from '@/lib/validation';
 import { logAuditEvent } from '@/lib/audit';
 import crypto from 'crypto';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: NextRequest) {
   try {
     const user = await requireAuth(['VERIFIER', 'AICTE_ADMIN', 'INSTITUTION_ADMIN']);

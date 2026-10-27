@@ -4,6 +4,8 @@ import { requireAuth } from '@/lib/auth';
 import { logAuditEvent } from '@/lib/audit';
 import { NormalizedStudentRow, RowValidationResult } from '@/lib/types';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: NextRequest) {
   try {
     const user = await requireAuth(['INSTITUTION_ADMIN']);

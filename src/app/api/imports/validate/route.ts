@@ -9,6 +9,8 @@ import {
 } from '@/lib/validation';
 import { RowValidationResult, BatchValidationSummary } from '@/lib/types';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: NextRequest) {
   try {
     const user = await requireAuth(['INSTITUTION_ADMIN']);

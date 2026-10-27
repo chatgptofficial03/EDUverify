@@ -4,6 +4,8 @@ import { requireAuth } from '@/lib/auth';
 import { validateStudentRow, maskApaarId } from '@/lib/validation';
 import { logAuditEvent } from '@/lib/audit';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } }
