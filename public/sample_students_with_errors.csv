@@ -1,0 +1,11 @@
+studentRecordNumber,apaarId,fullName,programme,academicYear,admissionDate,enrolmentStatus,seatCategory,nriStatus,ociStatus,foreignNationalStatus
+DIT-2025-CS-851,900066660001,Ananya Roy,B.Tech Computer Science & Engineering,2025-2026,2025-08-01,ACTIVE,General,false,false,false
+DIT-2025-CS-852,INVALID_APAAR_99,Sunil Chhetri,B.Tech Computer Science & Engineering,2025-2026,2025-08-01,ACTIVE,General,false,false,false
+,900066660003,Deepak Kumar,B.Tech Electronics & Communication,2025-2026,2025-08-02,ACTIVE,OBC,false,false,false
+DIT-2025-EC-854,900066660004,,B.Tech Electronics & Communication,2025-2026,2025-08-02,ACTIVE,SC,false,false,false
+DIT-2025-ME-855,900066660005,Ramesh Babu,B.Tech Mechanical Engineering,2025-2026,2025-14-99,ACTIVE,General,false,false,false
+DIT-2025-ME-856,900066660006,Suresh Raina,B.Tech Mechanical Engineering,2025-2026,2025-08-03,INVALID_STATUS_TEST,General,false,false,false
+DIT-2025-AI-857,900066660007,Pooja Verma,M.Tech AI & Data Science,2025-2026,2025-08-04,ACTIVE,General,false,false,false
+DIT-2025-AI-858,900066660007,Pooja Verma Duplicate,M.Tech AI & Data Science,2025-2026,2025-08-04,ACTIVE,General,false,false,false
+DIT-2025-CS-101,900066660009,Rahul Dravid,B.Tech Computer Science & Engineering,2025-2026,2025-08-05,ACTIVE,General,false,false,false
+DIT-2025-MB-860,900010000001,Karan Johar,MBA Tech Management,2025-2026,2025-08-06,ACTIVE,Management,false,false,false

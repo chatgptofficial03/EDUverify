@@ -1,0 +1,178 @@
+// EduVerify Prisma Schema
+// Smart India Hackathon 2026 - Problem SIH26263
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Institution {
+  id              String            @id @default(cuid())
+  officialCode    String            @unique
+  name            String
+  institutionType String            @default("Engineering & Technology")
+  state           String
+  district        String
+  address         String?
+  approvalStatus  String            @default("APPROVED") // APPROVED, PROVISIONAL, SUSPENDED
+  approvedIntake  Int               @default(600)
+  academicYear    String            @default("2025-2026")
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  users           User[]
+  students        Student[]
+  importBatches   DataImportBatch[]
+  auditLogs       AuditLog[]
+
+  @@index([state])
+  @@index([approvalStatus])
+}
+
+model User {
+  id              String            @id @default(cuid())
+  name            String
+  email           String            @unique
+  passwordHash    String
+  role            String            // INSTITUTION_ADMIN, AICTE_ADMIN, VERIFIER, OBSERVER
+  institutionId   String?
+  institution     Institution?      @relation(fields: [institutionId], references: [id], onDelete: SetNull)
+  isActive        Boolean           @default(true)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  uploadedBatches DataImportBatch[] @relation("BatchUploader")
+  reviewedBatches DataImportBatch[] @relation("BatchReviewer")
+  notifications   Notification[]
+  auditLogs       AuditLog[]
+
+  @@index([role])
+  @@index([institutionId])
+}
+
+model Student {
+  id                    String                @id @default(cuid())
+  institutionId         String
+  institution           Institution           @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  studentRecordNumber   String
+  apaarId               String                // 12-digit APAAR ID format
+  fullName              String
+  dateOfBirth           String?               // YYYY-MM-DD
+  programme             String                // e.g. B.Tech Computer Science & Engineering
+  course                String                @default("Undergraduate")
+  academicYear          String                @default("2025-2026")
+  admissionDate         String                // YYYY-MM-DD
+  enrolmentStatus       String                @default("ACTIVE") // ACTIVE, PROVISIONAL, COMPLETED, DISCONTINUED
+  seatCategory          String                @default("General") // General, OBC, SC, ST, EWS, Management, TFW
+  nriStatus             Boolean               @default(false)
+  ociStatus             Boolean               @default(false)
+  foreignNationalStatus Boolean               @default(false)
+  createdAt             DateTime              @default(now())
+  updatedAt             DateTime              @updatedAt
+
+  verificationRequests  VerificationRequest[]
+
+  @@unique([institutionId, studentRecordNumber])
+  @@index([apaarId])
+  @@index([institutionId])
+  @@index([academicYear])
+  @@index([programme])
+  @@index([enrolmentStatus])
+}
+
+model DataImportBatch {
+  id              String         @id @default(cuid())
+  institutionId   String
+  institution     Institution    @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  uploadedBy      String
+  uploader        User           @relation("BatchUploader", fields: [uploadedBy], references: [id])
+  filename        String
+  totalRows       Int            @default(0)
+  validRows       Int            @default(0)
+  invalidRows     Int            @default(0)
+  duplicateRows   Int            @default(0)
+  status          String         @default("DRAFT") // DRAFT, VALIDATING, VALIDATED, SUBMITTED, UNDER_REVIEW, APPROVED, REJECTED, CANCELLED
+  reviewComment   String?
+  reviewedBy      String?
+  reviewer        User?          @relation("BatchReviewer", fields: [reviewedBy], references: [id])
+  reviewedAt      DateTime?
+  submittedAt     DateTime?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  rows            ImportRow[]
+
+  @@index([institutionId])
+  @@index([status])
+}
+
+model ImportRow {
+  id                String          @id @default(cuid())
+  batchId           String
+  batch             DataImportBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  rowNumber         Int
+  rawDataJson       String          // Original row JSON
+  parsedDataJson    String?         // Sanitized normalized row JSON
+  validationStatus  String          // VALID, INVALID, WARNING
+  validationErrors  String?         // Serialized array of error/warning objects
+  matchedStudentId  String?
+  createdAt         DateTime        @default(now())
+
+  @@index([batchId])
+  @@index([validationStatus])
+}
+
+model VerificationRequest {
+  id                    String    @id @default(cuid())
+  studentId             String
+  student               Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  requestedBy           String
+  purpose               String
+  status                String    @default("PENDING") // PENDING, APPROVED, REJECTED
+  decisionComment       String?
+  verificationReference String    @unique // e.g., VER-2026-XXXXX
+  createdAt             DateTime  @default(now())
+  decidedAt             DateTime?
+
+  @@index([studentId])
+  @@index([verificationReference])
+  @@index([status])
+}
+
+model AuditLog {
+  id            String       @id @default(cuid())
+  actorUserId   String
+  actor         User         @relation(fields: [actorUserId], references: [id], onDelete: Cascade)
+  actorEmail    String
+  actorRole     String
+  institutionId String?
+  institution   Institution? @relation(fields: [institutionId], references: [id], onDelete: SetNull)
+  action        String       // LOGIN, LOGOUT, CREATE_STUDENT, UPDATE_STUDENT, BATCH_UPLOAD, BATCH_COMMIT, BATCH_SUBMIT, BATCH_APPROVE, BATCH_REJECT, VERIFICATION_QUERY, VERIFICATION_REQUEST
+  entityType    String       // STUDENT, BATCH, INSTITUTION, VERIFICATION, SESSION
+  entityId      String?
+  metadataJson  String?      // JSON safe metadata
+  timestamp     DateTime     @default(now())
+
+  @@index([actorUserId])
+  @@index([institutionId])
+  @@index([action])
+  @@index([timestamp])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  category  String   @default("SYSTEM") // IMPORT, SUBMISSION, REVIEW, VERIFICATION, SYSTEM
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([isRead])
+}

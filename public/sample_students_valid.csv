@@ -1,0 +1,11 @@
+studentRecordNumber,apaarId,fullName,programme,academicYear,admissionDate,enrolmentStatus,seatCategory,nriStatus,ociStatus,foreignNationalStatus
+DIT-2025-CS-801,900077770001,Aarav Raman,B.Tech Computer Science & Engineering,2025-2026,2025-08-01,ACTIVE,General,false,false,false
+DIT-2025-CS-802,900077770002,Kavita Krishnan,B.Tech Computer Science & Engineering,2025-2026,2025-08-01,ACTIVE,OBC,false,false,false
+DIT-2025-EC-803,900077770003,Devendra Sharma,B.Tech Electronics & Communication,2025-2026,2025-08-02,ACTIVE,SC,false,false,false
+DIT-2025-EC-804,900077770004,Sanya Malhotra,B.Tech Electronics & Communication,2025-2026,2025-08-02,ACTIVE,ST,false,false,false
+DIT-2025-ME-805,900077770005,Vikram Bundela,B.Tech Mechanical Engineering,2025-2026,2025-08-03,ACTIVE,EWS,false,false,false
+DIT-2025-ME-806,900077770006,Meenakshi Sundaram,B.Tech Mechanical Engineering,2025-2026,2025-08-03,ACTIVE,General,false,false,false
+DIT-2025-AI-807,900077770007,Naveen Patnaik,M.Tech AI & Data Science,2025-2026,2025-08-05,ACTIVE,General,false,false,false
+DIT-2025-AI-808,900077770008,Ritika Sengupta,M.Tech AI & Data Science,2025-2026,2025-08-05,ACTIVE,OBC,false,false,false
+DIT-2025-MB-809,900077770009,Abhishek Kapoor,MBA Tech Management,2025-2026,2025-08-06,ACTIVE,Management,true,false,false
+DIT-2025-MB-810,900077770010,Pooja Hegde,MBA Tech Management,2025-2026,2025-08-06,ACTIVE,TFW,false,false,false
